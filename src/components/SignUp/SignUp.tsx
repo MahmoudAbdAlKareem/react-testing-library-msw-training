@@ -14,10 +14,11 @@ import { validationSchema } from "./constants";
 import { signUp } from "../../APIs";
 import Snackbar, { SnackbarOrigin } from "@mui/material/Snackbar";
 import { useState } from "react";
+import HomePage from "../HomePage";
 
 function SignUp() {
   const [snackbarMessage, setSnackbarMessage] = useState("");
-
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -25,17 +26,21 @@ function SignUp() {
       password: "",
     },
     validationSchema: validationSchema,
-    onSubmit: async values => {
+    onSubmit: async (values) => {
       signUp(values)
-        .then(response => {
+        .then((response) => {
           setSnackbarMessage("Sign Up Successfully!");
+          setIsAuthenticated(true);
         })
-        .catch(error => {
+        .catch((error) => {
           setSnackbarMessage("Error Signing Up!");
         });
     },
   });
 
+  if (isAuthenticated) {
+    return <HomePage />;
+  }
   return (
     <Box
       sx={{
@@ -44,6 +49,7 @@ function SignUp() {
         flexDirection: "column",
         alignItems: "center",
       }}
+      maxWidth={"xs"}
     >
       <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
         <LockOutlinedIcon />
@@ -51,7 +57,12 @@ function SignUp() {
       <Typography component="h1" variant="h5">
         Sign up
       </Typography>
-      <Box component="form" noValidate onSubmit={formik.handleSubmit} sx={{ mt: 3 }}>
+      <Box
+        component="form"
+        noValidate
+        onSubmit={formik.handleSubmit}
+        sx={{ mt: 3 }}
+      >
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField

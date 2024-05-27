@@ -8,7 +8,12 @@ import SignUp from "./components/SignUp";
 
 function Copyright(props: any) {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
+    >
       {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
         Mahmoud Abd Alkareem
@@ -24,7 +29,7 @@ const defaultTheme = createTheme();
 export default function App() {
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
+      <Container component="main">
         <CssBaseline />
         <SignUp />
         <Copyright sx={{ mt: 5 }} />

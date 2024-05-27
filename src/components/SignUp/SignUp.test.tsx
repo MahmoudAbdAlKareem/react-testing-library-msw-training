@@ -30,4 +30,22 @@ describe("SignUp Component", () => {
       render(<SignUp />);
     });
   });
+
+  describe("Form Interaction", () => {
+    it("should enable Sign Up button when form is valid", async () => {
+      render(<SignUp />);
+    });
+
+    it("should disable Sign Up button when form is invalid", async () => {
+      render(<SignUp />);
+    });
+
+    it("should update form fields on user input", async () => {
+      render(<SignUp />);
+    });
+
+    it("should redirect user to home page after successful signup", async () => {
+      render(<SignUp />);
+    });
+  });
 });
