@@ -15,10 +15,13 @@ import { signUp } from "../../APIs";
 import Snackbar, { SnackbarOrigin } from "@mui/material/Snackbar";
 import { useState } from "react";
 import HomePage from "../HomePage";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 function SignUp() {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -27,6 +30,7 @@ function SignUp() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setIsLoading(true);
       signUp(values)
         .then((response) => {
           setSnackbarMessage("Sign Up Successfully!");
@@ -34,6 +38,9 @@ function SignUp() {
         })
         .catch((error) => {
           setSnackbarMessage("Error Signing Up!");
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
     },
   });
@@ -118,15 +125,16 @@ function SignUp() {
             />
           </Grid>
         </Grid>
-        <Button
+        <LoadingButton
           type="submit"
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
           disabled={!formik.isValid || !formik.dirty}
+          loading={isLoading}
         >
           Sign Up
-        </Button>
+        </LoadingButton>
         <Grid container justifyContent="flex-end">
           <Grid item>
             <Link href="#" variant="body2">

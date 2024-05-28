@@ -15,6 +15,7 @@ describe("SignUp Component", () => {
   describe("Validation", () => {
     it("should display validation errors for invalid email", async () => {
       render(<SignUp />);
+      // use jest preview to debug your test
       debug();
     });
 
