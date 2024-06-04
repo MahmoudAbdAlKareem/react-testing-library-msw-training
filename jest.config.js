@@ -1,4 +1,4 @@
-const esModules = ["axios"].join("|");
+const esModules = ["axios", "@bundled-es-modules"].join("|");
 
 module.exports = {
   roots: ["<rootDir>/src"],

@@ -1,6 +1,7 @@
-import { http } from "msw";
+import { http, HttpResponse } from "msw";
 
 export const handlers = [
-  // @TODO Add the correct request handlers here
-  // http.post("/signup"),
+  http.post("/hack your URL", () => {
+    return HttpResponse.json({});
+  }),
 ];

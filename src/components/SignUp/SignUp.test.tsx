@@ -7,7 +7,7 @@ import { debug } from "jest-preview";
 // Setting up the mock server
 const server = setupServer(...handlers);
 
-beforeAll(() => server.listen());
+beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
