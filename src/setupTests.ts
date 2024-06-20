@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import "whatwg-fetch";
-import { TextEncoder, TextDecoder } from "util";
+import { TextDecoder, TextEncoder } from "util";
 // @ts-ignore
 global.TextEncoder = TextEncoder;
 // @ts-ignore
