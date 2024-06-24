@@ -1,15 +1,7 @@
-import React from "react";
 import { render } from "@testing-library/react";
-import { setupServer } from "msw/node";
-import SignUp from "./";
-import { handlers } from "./handlers";
 import { debug } from "jest-preview";
-// Setting up the mock server
-const server = setupServer(...handlers);
-
-beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
+import React from "react";
+import SignUp from "./";
 
 describe("SignUp Component", () => {
   describe("Validation", () => {
