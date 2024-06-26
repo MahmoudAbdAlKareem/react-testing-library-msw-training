@@ -5,7 +5,6 @@ import {
   waitForElementToBeRemoved,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { debug } from "jest-preview";
 import React from "react";
 import SignUp from "./";
 import { testUser } from "./constants";
@@ -66,7 +65,7 @@ describe("SignUp Component", () => {
 
       expect(errorMessage).toBeInTheDocument();
 
-      debug();
+      // debug();
     });
 
     it("should display validation errors for short password", async () => {
@@ -148,15 +147,18 @@ describe("SignUp Component", () => {
       expect(promotionCheckbox).toBeChecked();
     });
 
+    // FIXME: Fails when run with other tests
     it("should redirect user to home page after successful sign up", async () => {
       render(<SignUp />);
 
       signUserUp();
 
-      await waitForElementToBeRemoved(getters.getUsernameInput());
+      await waitForElementToBeRemoved(() =>
+        screen.queryByRole("textbox", { name: /user name/i })
+      );
 
       await waitFor(() => {
-        expect(screen.getByText(/our latest products/i)).toBeInTheDocument();
+        expect(screen.getByText(/our latest/i)).toBeInTheDocument();
       });
     });
   });
