@@ -13,6 +13,47 @@ import { getters } from "./getters";
 import { fillForm, signUserUp } from "./utils";
 
 describe("SignUp Component", () => {
+  /**
+   * @group Smoke Tests
+   */
+  describe("Smoke Tests", () => {
+    it("should render correctly", () => {
+      render(<SignUp />);
+
+      const signUpHeading = getters.getSignUpHeading();
+      const usernameInput = getters.getUsernameInput();
+      const emailInput = getters.getEmailInput();
+      const passwordInput = getters.getPasswordInput();
+      const promotionCheckbox = getters.getPromotionCheckbox();
+      const signUpButton = getters.getSignUpButton();
+      const signInLink = getters.getSignInLink();
+
+      expect(signUpHeading).toBeInTheDocument();
+      expect(usernameInput).toBeInTheDocument();
+      expect(emailInput).toBeInTheDocument();
+      expect(passwordInput).toBeInTheDocument();
+      expect(promotionCheckbox).toBeInTheDocument();
+      expect(signUpButton).toBeInTheDocument();
+      expect(signInLink).toBeInTheDocument();
+    });
+
+    it("should render with correct initial states", () => {
+      render(<SignUp />);
+
+      const usernameInput = getters.getUsernameInput();
+      const emailInput = getters.getEmailInput();
+      const passwordInput = getters.getPasswordInput();
+      const promotionCheckbox = getters.getPromotionCheckbox();
+      const signUpButton = getters.getSignUpButton();
+
+      expect(usernameInput).toHaveValue("");
+      expect(emailInput).toHaveValue("");
+      expect(passwordInput).toHaveValue("");
+      expect(promotionCheckbox).not.toBeChecked();
+      expect(signUpButton).toBeDisabled();
+    });
+  });
+
   describe("Validation", () => {
     it("should display validation errors for invalid email", async () => {
       render(<SignUp />);
@@ -25,7 +66,7 @@ describe("SignUp Component", () => {
 
       expect(errorMessage).toBeInTheDocument();
 
-      // debug();
+      debug();
     });
 
     it("should display validation errors for short password", async () => {
@@ -50,8 +91,7 @@ describe("SignUp Component", () => {
       const successMessage = await screen.findByText(/sign up successfully/i);
       expect(successMessage).toBeInTheDocument();
 
-      // eslint-disable-next-line testing-library/no-debugging-utils
-      debug();
+      // debug();
     });
 
     it("should display error message on sign-up failure", async () => {
@@ -97,13 +137,15 @@ describe("SignUp Component", () => {
     it("should update form fields on user input", async () => {
       render(<SignUp />);
 
-      const { username, email, password } = testUser;
-
+      const promotionCheckbox = getters.getPromotionCheckbox();
       fillForm();
+      userEvent.click(promotionCheckbox);
 
+      const { username, email, password } = testUser;
       expect(getters.getUsernameInput()).toHaveValue(username);
       expect(getters.getEmailInput()).toHaveValue(email);
       expect(getters.getPasswordInput()).toHaveValue(password);
+      expect(promotionCheckbox).toBeChecked();
     });
 
     it("should redirect user to home page after successful sign up", async () => {
@@ -114,9 +156,7 @@ describe("SignUp Component", () => {
       await waitForElementToBeRemoved(getters.getUsernameInput());
 
       await waitFor(() => {
-        expect(
-          screen.getByRole("heading", { name: /our latest products/i })
-        ).toBeInTheDocument();
+        expect(screen.getByText(/our latest products/i)).toBeInTheDocument();
       });
     });
   });
