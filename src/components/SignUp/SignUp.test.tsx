@@ -6,36 +6,15 @@ import {
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { debug } from "jest-preview";
-import React, { act } from "react";
+import React from "react";
 import SignUp from "./";
+import { testUser } from "./constants";
 import { getters } from "./getters";
-import { existingUser, testUser } from "./constants";
-import { UserForRegistration } from "./types";
+import { fillForm, signUserUp } from "./utils";
 
-const fillForm = (user?: UserForRegistration) => {
-  user = user || testUser;
-
-  const { username, email, password } = user;
-
-  const userNameInput = getters.getUsernameInput();
-  const emailInput = getters.getEmailInput();
-  const passwordInput = getters.getPasswordInput();
-
-  userEvent.type(userNameInput, username);
-  userEvent.type(emailInput, email);
-  userEvent.type(passwordInput, password);
-};
-
-const signUserUp = async (withSuccess: boolean = true) => {
-  const signUpButton = getters.getSignUpButton();
-
-  fillForm(withSuccess ? testUser : existingUser);
-
-  userEvent.click(signUpButton);
-};
 describe("SignUp Component", () => {
   describe("Validation", () => {
-    it("should display validation errors for invalid email", async() => {
+    it("should display validation errors for invalid email", async () => {
       render(<SignUp />);
       const emailInput = getters.getEmailInput();
 
@@ -46,12 +25,10 @@ describe("SignUp Component", () => {
 
       expect(errorMessage).toBeInTheDocument();
 
-      // use jest preview to debug your test
-      // eslint-disable-next-line testing-library/no-debugging-utils
-      debug();
+      // debug();
     });
 
-    it("should display validation errors for short password", async() => {
+    it("should display validation errors for short password", async () => {
       render(<SignUp />);
       const passwordInput = getters.getPasswordInput();
 
@@ -68,9 +45,7 @@ describe("SignUp Component", () => {
     it("should display success message on successful sign-up", async () => {
       render(<SignUp />);
 
-      // await act(async () => {
       signUserUp();
-      // });
 
       const successMessage = await screen.findByText(/sign up successfully/i);
       expect(successMessage).toBeInTheDocument();
@@ -94,10 +69,10 @@ describe("SignUp Component", () => {
     it("should enable Sign Up button when form is valid", async () => {
       render(<SignUp />);
 
-      await signUserUp();
+      fillForm();
 
       await waitFor(() => {
-        expect(getters.getSignUpButton).toBeEnabled();
+        expect(getters.getSignUpButton()).toBeEnabled();
       });
     });
 
@@ -126,9 +101,9 @@ describe("SignUp Component", () => {
 
       fillForm();
 
-      expect(getters.getUsernameInput).toHaveValue(username);
-      expect(getters.getEmailInput).toHaveValue(email);
-      expect(getters.getPasswordInput).toHaveValue(password);
+      expect(getters.getUsernameInput()).toHaveValue(username);
+      expect(getters.getEmailInput()).toHaveValue(email);
+      expect(getters.getPasswordInput()).toHaveValue(password);
     });
 
     it("should redirect user to home page after successful sign up", async () => {
@@ -136,7 +111,7 @@ describe("SignUp Component", () => {
 
       signUserUp();
 
-      await waitForElementToBeRemoved(getters.getUsernameInput);
+      await waitForElementToBeRemoved(getters.getUsernameInput());
 
       await waitFor(() => {
         expect(
